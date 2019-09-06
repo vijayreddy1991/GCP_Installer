@@ -5,7 +5,7 @@ provider "google" {
 }
 
 resource "google_compute_instance" "default" {
-  name         = "ubuntu16"
+  name         = "ubuntu"
   machine_type = "${var.instance_type}"
   zone         = "${var.zone_id}"
 
@@ -17,13 +17,13 @@ resource "google_compute_instance" "default" {
     }
   }
 
-#   network_interface {
-#     network = "default"
+  network_interface {
+    network = "default"
 
-#     access_config {
-#       // Ephemeral IP
-#     }
-#   }
+    access_config {
+      // Ephemeral IP
+    }
+  }
 
 }
 
@@ -35,5 +35,5 @@ project = "${var.project}"
 
 }
 output "ip" {
-value = "${google_compute_instance.default}"
+value = "${google_compute_instance.default.network_interface.0.access_config.0.nat_ip}"
 }
