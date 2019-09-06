@@ -36,7 +36,7 @@ pipelines:
             - yes y | ssh-keygen -q -t rsa -N ""
             - Path=$(pwd)
             - echo path=$Path  
-            - echo "~/.ssh"
+            - echo ~/.ssh
             - pushd $res_gcp_pipeline_resourcePath
             - terraform init            
             - PWD=$(pwd)
