@@ -124,10 +124,11 @@ pipelines:
           onExecute: 
             - pushd $res_gcp_pipeline_resourcePath
             - echo $PWD
-            - echo "$int_gcp_key_jsonKey" > gcp.json           
+            - ls -la
+#             - echo "$int_gcp_key_jsonKey" > gcp.json           
             - echo "$vijay_ip_address"
             - terraform init
             - restore_pipeline_files jfrog_pipeline $PWD/terraform.tfstate
             - ls -la
-            - terraform destroy 
+            - terraform destroy -auto-approve -var-file="$terraform.tfstate"
             - popd
