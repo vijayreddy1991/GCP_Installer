@@ -17,15 +17,15 @@ resource "google_compute_instance" "default" {
     }
   }
 
-  network_interface {
-    network = "default"
+#   network_interface {
+#     network = "default"
 
-    access_config {
-      // Ephemeral IP
-    }
-  }
+#     access_config {
+#       // Ephemeral IP
+#     }
+#   }
 
-}
+# }
 
 resource "google_compute_project_metadata" "default" {
 metadata = {
@@ -35,5 +35,5 @@ project = "${var.project}"
 
 }
 output "ip" {
-value = "${google_compute_instance.default.network_interface.0.access_config.0.nat_ip}"
+value = "${google_compute_instance.default}"
 }
