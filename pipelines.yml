@@ -127,5 +127,5 @@ pipelines:
             - echo "$vijay_ip_address"
             - terraform init
             - restore_pipeline_files jfrog_pipeline $PWD/terraform.tfstate
-            - terraform destroy -auto-approve
+            - terraform destroy -auto-approve -var-file="$PWD/gcp.json"
             - popd
