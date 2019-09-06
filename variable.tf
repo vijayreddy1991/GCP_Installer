@@ -18,8 +18,8 @@ variable "project" {
 }
 
 variable "gce_ssh_pub_key_file" {
- default = $Path"/.ssh/id_rsa.pub"
+ default = "/.ssh/id_rsa.pub"
 }
 variable "gce_ssh_user" {
- default = "root"
+ default = "vijay"
 }
