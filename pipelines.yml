@@ -51,7 +51,7 @@ pipelines:
             - vijay_ip_address=$(terraform output ip)
             - echo "$vijay_ip_address"          
             - add_pipeline_variables vijay_ip_address=$vijay_ip_address
-            - add_pipeline_files $PWD/terraform.tfstate jfrog_pipeline
+            - add_pipeline_files $PWD/terraform.tfstate jfrog
             - add_pipeline_files ~/.ssh/id_rsa jfrog_pipeline
             - popd
 
@@ -129,7 +129,7 @@ pipelines:
             - echo "$vijay_ip_address"
             - restore_pipeline_files jfrog_pipeline ~/.ssh/id_rsa
             - terraform init
-            - restore_pipeline_files jfrog_pipeline $PWD/terraform.tfstate
+            - restore_pipeline_files jfrog $PWD/terraform.tfstate
             - cat terraform.tfstate
             - ls -la
             - terraform destroy -auto-approve
