@@ -33,7 +33,7 @@ pipelines:
             - pwd
             - terraform --version
             - ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
-            - Path=$(pwd)
+            - Place=$(pwd)
             - echo path=$Path  
             - pushd ~/.ssh
             - ls -la
