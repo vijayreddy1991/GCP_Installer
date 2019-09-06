@@ -43,7 +43,7 @@ pipelines:
             - terraform init            
             - PWD=$(pwd)
             - echo PWD=$PWD
-            - echo "int_gcp_key_jsonKey" > gcp.json
+            - echo "$int_gcp_key_jsonKey" > gcp.json
             - ls -la            
             - terraform apply -auto-approve -var-file="$PWD/gcp.json"
             - terraform output ip
