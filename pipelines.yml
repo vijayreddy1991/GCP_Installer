@@ -33,7 +33,7 @@ pipelines:
             - pwd
             - terraform --version
             - printenv
-            - ssh-keygen -t rsa -N ""
+            - yes y | ssh-keygen -q -t rsa -N ""
             - Path=$(pwd)
             - echo path=$Path            
             - pushd $res_gcp_pipeline_resourcePath
