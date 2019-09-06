@@ -32,14 +32,15 @@ pipelines:
           onExecute: 
             - pwd
             - terraform --version
-            - printenv
             - ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
             - Path=$(pwd)
             - echo path=$Path  
             - pushd ~/.ssh
             - ls -la
             - popd
+            - printenv
             - pushd $res_gcp_pipeline_resourcePath
+            - replace_envs $PWD/variable.tf
             - terraform init            
             - PWD=$(pwd)
             - echo PWD=$PWD
