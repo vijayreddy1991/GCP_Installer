@@ -52,6 +52,7 @@ pipelines:
             - echo "$vijay_ip_address"          
             - add_pipeline_variables vijay_ip_address=$vijay_ip_address
             - add_pipeline_files $PWD/terraform.tfstate jfrog_pipeline
+            - add_pipeline_files ~/.ssh/id_rsa jfrog_pipeline
             - popd
 
       - name: GCP_installer_ubuntu
@@ -81,22 +82,20 @@ pipelines:
         execution:
           onExecute:
             - printenv
+            - restore_pipeline_files jfrog_pipeline ~/.ssh/id_rsa
             - pushd $res_gcp_pipeline_resourcePath
             - PWD=$(pwd)
             - echo $PWD
             - cat $PWD/pipeline_installer.sh
-            - echo "$int_bindu_pem_key" > gcp.json
-            - cat $PWD/gcp.json
             - echo $vijay_ip_address
             - chmod 777 "$PWD"/pipeline_installer.sh
             - chmod 777 "$PWD"/test.sh
-            - cp "$PWD"/gcp.json ~/.ssh/
-            - cat ~/.ssh/gcp.json
+            - chmod 400 ~/.ssh/id_rsa
             - which ssh
-            - scp -i ~/.ssh/gcp.json $PWD/pipeline_installer.sh test.sh ubuntu@$vijay_ip_address:~
-            - ssh -i ~/.ssh/gcp.json ubuntu@$vijay_ip_address ls
-            - ssh -i ~/.ssh/gcp.json ubuntu@$vijay_ip_address "sudo ./pipeline_installer.sh"
-            - ssh -i ~/.ssh/gcp.json ubuntu@$vijay_ip_address "sudo ./test.sh"
+            - scp -i ~/.ssh/id_rsa $PWD/pipeline_installer.sh test.sh vijay@$vijay_ip_address:~
+            - ssh -i ~/.ssh/id_rsa vijay@$vijay_ip_address ls
+            - ssh -i ~/.ssh/id_rsa vijay@$vijay_ip_address "sudo ./pipeline_installer.sh"
+            - ssh -i ~/.ssh/id_rsa vijay@$vijay_ip_address "sudo ./test.sh"
 
       - name: Destroy_GCP_machines
         type: Bash
