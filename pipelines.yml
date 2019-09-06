@@ -130,5 +130,5 @@ pipelines:
             - terraform init
             - restore_pipeline_files jfrog_pipeline $PWD/terraform.tfstate
             - ls -la
-            - terraform destroy -auto-approve -var-file="$terraform.tfstate"
+            - terraform plan -destroy 
             - popd
