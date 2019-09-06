@@ -33,7 +33,7 @@ pipelines:
             - pwd
             - terraform --version
             - printenv
-            - yes y | ssh-keygen -q -t rsa -N ""
+            - ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
             - Path=$(pwd)
             - echo path=$Path  
             - pushd ~/.ssh
