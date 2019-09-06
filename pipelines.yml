@@ -130,6 +130,7 @@ pipelines:
             - restore_pipeline_files jfrog_pipeline ~/.ssh/id_rsa
             - terraform init
             - restore_pipeline_files jfrog_pipeline $PWD/terraform.tfstate
+            - cat terraform.tfstate
             - ls -la
-            - terraform destroy 
+            - terraform destroy -auto-approve
             - popd
