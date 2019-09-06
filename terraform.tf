@@ -5,7 +5,7 @@ provider "google" {
 }
 
 resource "google_compute_instance" "default" {
-  name         = "terraform-test"
+  name         = "ubuntu"
   machine_type = "${var.instance_type}"
   zone         = "${var.zone_id}"
 
