@@ -128,6 +128,8 @@ pipelines:
             - echo "$int_gcp_key_jsonKey" > gcp.json           
             - echo "$vijay_ip_address"
             - restore_pipeline_files jfrog_pipeline ~/.ssh/id_rsa
+            - pushd ~/.ssh
+            - ls -la
             - terraform init
             - restore_pipeline_files jfrog $PWD/terraform.tfstate
             - cat terraform.tfstate
