@@ -25,7 +25,7 @@ resource "google_compute_instance" "default" {
 #     }
 #   }
 
-# }
+}
 
 resource "google_compute_project_metadata" "default" {
 metadata = {
