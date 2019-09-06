@@ -5,7 +5,7 @@ provider "google" {
 }
 
 resource "google_compute_instance" "default" {
-  name         = "ubuntu-16.04"
+  name         = "ubuntu16"
   machine_type = "${var.instance_type}"
   zone         = "${var.zone_id}"
 
