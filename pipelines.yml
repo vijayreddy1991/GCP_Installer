@@ -86,6 +86,7 @@ pipelines:
             - pushd $res_gcp_pipeline_resourcePath
             - PWD=$(pwd)
             - echo $PWD
+            - replace_envs $PWD/pipeline_installer.sh
             - cat $PWD/pipeline_installer.sh
             - echo $vijay_ip_address
             - chmod 777 "$PWD"/pipeline_installer.sh
