@@ -1,5 +1,5 @@
 resources:
-  - name: repo_pipeline
+  - name: gcp_pipeline
     type: GitRepo
     configuration:
       gitProvider: vijay_github
@@ -19,9 +19,9 @@ pipelines:
             env1: value1
             env2: value2
           integrations:
-            - name: aws_keys
+            - name: gcp_key
           inputResources:
-            - name: repo_pipeline
+            - name: gcp_pipeline
           runtime:       
             type: image     #<image/host>
             image:
@@ -33,21 +33,16 @@ pipelines:
             - pwd
             - terraform --version
             - printenv
-            - pushd $res_repo_pipeline_resourcePath
+            - pushd $res_gcp_pipeline_resourcePath
             - terraform init            
             - ls -la
             - PWD=$(pwd)
             - echo PWD=$PWD
             - cat terraform.tf
-            - replace_envs $PWD/keys.tfvar
-            - terraform apply -auto-approve -var-file="$PWD/keys.tfvar"
-            - terraform output vijay_ip
-            - vijay_ip_address=$(terraform output vijay_ip)
-            - echo "$vijay_ip_address"
-            - terraform output bindu_ip
-            - bindu_ip_address=$(terraform output bindu_ip)
-            - echo "$bindu_ip_address"
-            - add_pipeline_variables bindu_ip_address=$bindu_ip_address            
+            - terraform apply -auto-approve
+            - terraform output ip
+            - vijay_ip_address=$(terraform output ip)
+            - echo "$vijay_ip_address"          
             - add_pipeline_variables vijay_ip_address=$vijay_ip_address
             - add_pipeline_files $PWD/terraform.tfstate jfrog_pipeline
             - popd
@@ -63,13 +58,13 @@ pipelines:
             env1: value1
             env2: value2
           integrations:
-            - name: bindu_pem 
+            - name: gcp_key
             - name: ART_keys
             - name: art
           inputSteps:
             - name: Spin_up_GCP
           inputResources:
-            - name: repo_pipeline            
+            - name: gcp_pipeline            
           runtime:       
             type: image     #<image/host>
             image:
@@ -79,69 +74,22 @@ pipelines:
         execution:
           onExecute:
             - printenv
-            - pushd $res_repo_pipeline_resourcePath
+            - pushd $res_gcp_pipeline_resourcePath
             - PWD=$(pwd)
             - echo $PWD
-            - replace_envs $PWD/pipeline_installer.sh
             - cat $PWD/pipeline_installer.sh
-            - echo "$int_bindu_pem_key" > bindu.pem
-            - cat $PWD/bindu.pem
+            - echo "$int_bindu_pem_key" > gcp.json
+            - cat $PWD/gcp.json
             - echo $vijay_ip_address
             - chmod 777 "$PWD"/pipeline_installer.sh
             - chmod 777 "$PWD"/test.sh
-            - sudo chmod 600 "$PWD"/bindu.pem
-            - cp "$PWD"/bindu.pem ~/.ssh/
-            - cat ~/.ssh/bindu.pem
+            - cp "$PWD"/gcp.json ~/.ssh/
+            - cat ~/.ssh/gcp.json
             - which ssh
-            - scp -i ~/.ssh/bindu.pem $PWD/pipeline_installer.sh test.sh ubuntu@$vijay_ip_address:~
-            - ssh -i ~/.ssh/bindu.pem ubuntu@$vijay_ip_address ls
-            - ssh -i ~/.ssh/bindu.pem ubuntu@$vijay_ip_address "sudo ./pipeline_installer.sh"
-            - ssh -i ~/.ssh/bindu.pem ubuntu@$vijay_ip_address "sudo ./test.sh"
-
-      - name: GCP_installation_centos
-        type: Bash
-        configuration:
-          affinityGroup: debain
-          priority: 0
-          timeoutSeconds: 50000
-          environmentVariables:
-            env1: value1
-            env2: value2
-          integrations:
-            - name: bindu_pem 
-            - name: ART_keys
-            - name: art  
-          inputSteps:
-            - name: Spin_up_GCP
-          inputResources:
-            - name: repo_pipeline   
-          runtime:       
-            type: image     #<image/host>
-            image:
-              custom:
-                name: drydock/u16
-                tag: master
-        execution:
-          onExecute:
-            - printenv
-            - pushd $res_repo_pipeline_resourcePath
-            - PWD=$(pwd)
-            - echo $PWD
-            - replace_envs $PWD/pipeline_centos.sh
-            - cat $PWD/pipeline_centos.sh
-            - echo "$int_bindu_pem_key" > bindu.pem
-            - cat $PWD/bindu.pem
-            - echo $bindu_ip_address
-            - chmod 777 "$PWD"/pipeline_centos.sh
-            - chmod 777 "$PWD"/test.sh
-            - sudo chmod 600 "$PWD"/bindu.pem
-            - cp "$PWD"/bindu.pem ~/.ssh/
-            - cat ~/.ssh/bindu.pem
-            - which ssh
-            - scp -i ~/.ssh/bindu.pem $PWD/pipeline_centos.sh test.sh centos@$bindu_ip_address:~
-            - ssh -i ~/.ssh/bindu.pem centos@$bindu_ip_address ls
-            - ssh -i ~/.ssh/bindu.pem centos@$bindu_ip_address "sudo ./pipeline_centos.sh"
-            - ssh -i ~/.ssh/bindu.pem centos@$bindu_ip_address "sudo ./test.sh"
+            - scp -i ~/.ssh/gcp.json $PWD/pipeline_installer.sh test.sh ubuntu@$vijay_ip_address:~
+            - ssh -i ~/.ssh/gcp.json ubuntu@$vijay_ip_address ls
+            - ssh -i ~/.ssh/gcp.json ubuntu@$vijay_ip_address "sudo ./pipeline_installer.sh"
+            - ssh -i ~/.ssh/gcp.json ubuntu@$vijay_ip_address "sudo ./test.sh"
 
       - name: Destroy_GCP_machines
         type: Bash
@@ -154,12 +102,11 @@ pipelines:
             env1: value1
             env2: value2
           integrations:
-            - name: aws_keys
+            - name: gcp_key
           inputSteps:
             - name: GCP_installer_ubuntu
-            - name: GCP_installation_centos
           inputResources:
-            - name: repo_pipeline
+            - name: gcp_pipeline
           runtime:       
             type: image     #<image/host>
             image:
@@ -168,11 +115,10 @@ pipelines:
                 tag: master
         execution:
           onExecute: 
-            - pushd $res_repo_pipeline_resourcePath
+            - pushd $res_gcp_pipeline_resourcePath
             - echo $PWD
             - echo "$vijay_ip_address"
             - terraform init
-            - replace_envs $PWD/keys.tfvar
             - restore_pipeline_files jfrog_pipeline $PWD/terraform.tfstate
-            - terraform destroy -auto-approve -var-file="$PWD/keys.tfvar"
+            - terraform destroy -auto-approve
             - popd
