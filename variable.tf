@@ -14,7 +14,7 @@ variable "region" {
  default = "us-central1"
 }
 variable "project" {
- default = "pure-spring-242015"
+ default = "installer-252005"
 }
 
 variable "gce_ssh_pub_key_file" {
