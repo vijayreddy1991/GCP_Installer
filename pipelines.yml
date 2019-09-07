@@ -129,8 +129,6 @@ pipelines:
             - echo "$int_jsonkey_jsonKey" > gcp.json           
             - echo "$vijay_ip_address"
             - restore_pipeline_files jfrogkey ~/.ssh/id_rsa.pub
-            - pushd ~/.ssh
-            - ls -la
             - terraform init
             - restore_pipeline_files jfrog $PWD/terraform.tfstate
             - cat terraform.tfstate
