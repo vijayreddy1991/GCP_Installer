@@ -44,7 +44,7 @@ pipelines:
             - terraform init            
             - PWD=$(pwd)
             - echo PWD=$PWD
-            - echo "$int_gcp_key_jsonKey" > gcp.json
+            - echo "$int_jsonkey_jsonKey" > gcp.json
             - ls -la            
             - terraform apply -auto-approve -var-file="$PWD/gcp.json"
             - terraform output ip
@@ -53,6 +53,7 @@ pipelines:
             - add_pipeline_variables vijay_ip_address=$vijay_ip_address
             - add_pipeline_files $PWD/terraform.tfstate jfrog
             - add_pipeline_files ~/.ssh/id_rsa jfrog_pipeline
+            - add_pipeline_files ~/.ssh/id_rsa.pub jfrogkey
             - popd
 
       - name: GCP_installer_ubuntu
@@ -125,9 +126,9 @@ pipelines:
             - pushd $res_gcp_pipeline_resourcePath
             - echo $PWD
             - ls -la
-            - echo "$int_gcp_key_jsonKey" > gcp.json           
+            - echo "$int_jsonkey_jsonKey" > gcp.json           
             - echo "$vijay_ip_address"
-            - restore_pipeline_files jfrog_pipeline ~/.ssh/id_rsa
+            - restore_pipeline_files jfrogkey ~/.ssh/id_rsa.pub
             - pushd ~/.ssh
             - ls -la
             - terraform init
