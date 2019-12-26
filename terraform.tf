@@ -9,10 +9,10 @@ resource "google_compute_instance" "default" {
   machine_type = "${var.instance_type}"
   zone         = "${var.zone_id}"
   
-resource "google_compute_instance" "default" {
-  name         = "centos"
-  machine_type = "${var.instance_type}"
-  zone         = "${var.zone_id}"  
+# resource "google_compute_instance" "default" {
+#   name         = "centos"
+#   machine_type = "${var.instance_type}"
+#   zone         = "${var.zone_id}"  
 
 
   boot_disk {
