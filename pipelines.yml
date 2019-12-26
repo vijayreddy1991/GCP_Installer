@@ -11,10 +11,6 @@ pipelines:
       - name: Spin_up_GCP
         type: Bash
         configuration:
-          affinityGroup: debain 
-          priority: 0
-          timeoutSeconds: 50000
-#           nodePool: ubuntu_16
           environmentVariables:
             env1: value1
             env2: value2
@@ -23,7 +19,7 @@ pipelines:
           inputResources:
             - name: gcp_pipeline
           runtime:       
-            type: image     #<image/host>
+            type: image    
             image:
               custom:
                 name: drydock/u16
