@@ -27,6 +27,7 @@ pipelines:
         execution:
           onExecute: 
             - pwd
+            - pushd $res_gcp_pipeline_resourcePath
             - terraform --version
             - ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
             - Place=$(pwd)
@@ -36,7 +37,6 @@ pipelines:
             - popd
             - printenv
             - terraform init    
-#             - pushd $res_gcp_pipeline_resourcePath
             - PWD=$(pwd)
             - echo PWD=$PWD
             - echo "$int_jsonkey_jsonKey" > gcp.json
