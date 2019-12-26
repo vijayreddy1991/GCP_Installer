@@ -27,7 +27,6 @@ pipelines:
         execution:
           onExecute: 
             - pwd
-            - pushd $res_gcp_pipeline_resourcePath
             - terraform --version
             - ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
             - Place=$(pwd)
@@ -36,6 +35,7 @@ pipelines:
             - ls -la
             - popd
             - printenv
+            - pushd $res_gcp_pipeline_resourcePath
             - terraform init    
             - PWD=$(pwd)
             - echo PWD=$PWD
