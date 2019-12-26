@@ -35,9 +35,8 @@ pipelines:
             - ls -la
             - popd
             - printenv
+            - terraform init    
             - pushd $res_gcp_pipeline_resourcePath
-#             - replace_envs $PWD/variable.tf
-            - terraform init            
             - PWD=$(pwd)
             - echo PWD=$PWD
             - echo "$int_jsonkey_jsonKey" > gcp.json
